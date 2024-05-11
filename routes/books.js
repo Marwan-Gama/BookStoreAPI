@@ -16,7 +16,9 @@ const {
 router.get(
   "/",
   AsyncHandler(async (req, res) => {
-    const booksList = await Book.find().sort({ name: 1 });
+    const booksList = await Book.find()
+      .sort({ name: 1 })
+      .populate("author", ["_id", "firstName", "LastName"]);
     res.status(200).json(booksList);
   })
 );
@@ -105,7 +107,11 @@ router.delete(
 router.get(
   "/:id",
   AsyncHandler(async (req, res) => {
-    const book = await Book.findById(req.params.id);
+    const book = await Book.findById(req.params.id).populate("author", [
+      "_id",
+      "firstName",
+      "LastName",
+    ]);
     if (book) {
       res.status(200).json(book);
     } else {
