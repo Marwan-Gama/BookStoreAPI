@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
 
+// Book Schema
 const BookSchema = mongoose.Schema(
   {
     name: {
@@ -22,6 +23,7 @@ const BookSchema = mongoose.Schema(
   { timestamps: true }
 );
 
+// Book model
 const Book = mongoose.model("Book", BookSchema);
 
 // Validate Create Book

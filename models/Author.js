@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
 
+// Author Schema
 const AuthorSchema = mongoose.Schema(
   {
     firstName: {
@@ -21,6 +22,7 @@ const AuthorSchema = mongoose.Schema(
   { timestamps: true }
 );
 
+// Author model
 const Author = mongoose.model("Author", AuthorSchema);
 
 // Validate Create author
