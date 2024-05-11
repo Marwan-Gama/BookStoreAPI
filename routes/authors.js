@@ -1,0 +1,112 @@
+const express = require("express");
+const router = express.Router();
+const AsyncHandler = require("express-async-handler");
+const {
+  Author,
+  validateCreateAuthor,
+  validateUpdateAuthor,
+} = require("../models/Author");
+
+/**
+ * @desc Get all authors
+ * @route /api/authors
+ * @method GET
+ * @access puplic
+ */
+router.get(
+  "/",
+  AsyncHandler(async (req, res) => {
+    const authorsList = await Author.find().sort({ firstName: 1 });
+    res.status(200).json(authorsList);
+  })
+);
+
+/**
+ * @desc Add author
+ * @route /api/authors
+ * @method POST
+ * @access puplic
+ */
+router.post(
+  "/",
+  AsyncHandler(async (req, res) => {
+    const { error } = validateCreateAuthor(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
+    const author = new Author({
+      firstName: req.body.firstName,
+      LastName: req.body.LastName,
+    });
+
+    const result = await author.save();
+    res.status(201).json(result);
+  })
+);
+
+/**
+ * @desc Update author detalis
+ * @route /api/authors
+ * @method PUT
+ * @access puplic
+ */
+router.put(
+  "/:id",
+  AsyncHandler(async (req, res) => {
+    const { error } = validateUpdateAuthor(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
+    const author = await Author.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: {
+          firstName: req.body.firstName,
+          LastName: req.body.LastName,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json(author);
+  })
+);
+
+/**
+ * @desc Delete author by id
+ * @route /api/authors
+ * @method DELETE
+ * @access puplic
+ */
+router.delete(
+  "/:id",
+  AsyncHandler(async (req, res) => {
+    const author = await Author.findByIdAndDelete(req.params.id);
+    if (author) {
+      res.status(200).json({ message: "Author has ben deleting" });
+    } else {
+      res.status(404).json({ message: "Author not find!" });
+    }
+  })
+);
+
+/**
+ * @desc Get author by id
+ * @route /api/authors
+ * @method GET
+ * @access puplic
+ */
+router.get("/:id", async (req, res) => {
+  const author = await Author.findById(req.params.id);
+  if (author) {
+    res.status(200).json(author);
+  } else {
+    res
+      .status(404)
+      .json({ message: `Author With ID ${req.params.id} Not Found!` });
+  }
+});
+
+module.exports = router;
