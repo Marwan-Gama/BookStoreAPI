@@ -6,6 +6,7 @@ const {
   validateUpdateBook,
   validateCreateBook,
 } = require("../models/Book");
+const { verifyTokenAndAdmin } = require("../middlewares/verifyToken");
 
 /**
  * @desc Get all books
@@ -27,10 +28,11 @@ router.get(
  * @desc Add book
  * @route /api/books
  * @method POST
- * @access public
+ * @access private (onle admin)
  */
 router.post(
   "/",
+  verifyTokenAndAdmin,
   AsyncHandler(async (req, res) => {
     const { error } = validateCreateBook(req.body);
     if (error) {
@@ -51,10 +53,11 @@ router.post(
  * @desc Update book by id
  * @route /api/books
  * @method PUT
- * @access public
+ * @access private (onle admin)
  */
 router.put(
   "/:id",
+  verifyTokenAndAdmin,
   AsyncHandler(async (req, res) => {
     const { error } = validateUpdateBook(req.body);
     if (error) {
@@ -84,10 +87,11 @@ router.put(
  * @desc Delete book by id
  * @route /api/books
  * @method DELETE
- * @access public
+ * @access private (onle admin)
  */
 router.delete(
   "/:id",
+  verifyTokenAndAdmin,
   AsyncHandler(async (req, res) => {
     const book = await Book.findByIdAndDelete(req.params.id);
     if (book) {

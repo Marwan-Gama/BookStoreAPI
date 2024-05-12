@@ -80,10 +80,7 @@ router.post(
 
     const token = jwt.sign(
       { id: user._id, isAdmin: user.isAdmin },
-      process.env.JWT_SECRET_KEY,
-      {
-        expiresIn: "3d",
-      }
+      process.env.JWT_SECRET_KEY
     );
 
     const { password, ...other } = user._doc;
