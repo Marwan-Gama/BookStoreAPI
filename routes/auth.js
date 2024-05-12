@@ -35,7 +35,6 @@ router.post(
       email: req.body.email,
       username: req.body.username,
       password: req.body.password,
-      isAdmin: req.body.isAdmin,
     });
 
     const token = jwt.sign(

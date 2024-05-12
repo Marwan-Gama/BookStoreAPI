@@ -53,7 +53,6 @@ function ValidateRegisterUser(obj) {
       .trim()
       .min(6)
       .required(),
-    isAdmin: Joi.bool(),
   });
   return schema.validate(obj);
 }
@@ -88,7 +87,6 @@ function ValidateUpdateUser(obj) {
     password: Joi.string()
       .trim()
       .min(6),
-    isAdmin: Joi.bool(),
   });
   return schema.validate(obj);
 }

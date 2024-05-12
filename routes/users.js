@@ -2,17 +2,21 @@ const express = require("express");
 const router = express.Router();
 const AsyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
-const verifyToken = require("../middlewares/verifyToken");
+const {
+  verifyTokenAndAdmin,
+  verifyTokenAndAuthorization,
+} = require("../middlewares/verifyToken");
 const { User, ValidateUpdateUser } = require("../models/User");
 
 /**
  * @desc  Get all users
  * @route /api/users
  * @method PUT
- * @access private
+ * @access private (Only for Admin)
  */
 router.get(
   "/",
+  verifyTokenAndAdmin,
   AsyncHandler(async (req, res) => {
     const usersList = await User.find();
     res.status(200).json(usersList);
@@ -27,14 +31,8 @@ router.get(
  */
 router.put(
   "/:id",
-  verifyToken,
+  verifyTokenAndAuthorization,
   AsyncHandler(async (req, res) => {
-    if (req.user.id != req.params.id) {
-      return res
-        .status(403)
-        .json({ message: "You are not allowed to this action" });
-    }
-
     const { error } = ValidateUpdateUser(req.body);
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
