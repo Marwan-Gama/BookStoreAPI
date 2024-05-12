@@ -11,7 +11,7 @@ const {
  * @desc Get all books
  * @route /api/books
  * @method GET
- * @access puplic
+ * @access public
  */
 router.get(
   "/",
@@ -27,7 +27,7 @@ router.get(
  * @desc Add book
  * @route /api/books
  * @method POST
- * @access puplic
+ * @access public
  */
 router.post(
   "/",
@@ -48,10 +48,10 @@ router.post(
 );
 
 /**
- * @desc Update book detalis
+ * @desc Update book by id
  * @route /api/books
  * @method PUT
- * @access puplic
+ * @access public
  */
 router.put(
   "/:id",
@@ -84,7 +84,7 @@ router.put(
  * @desc Delete book by id
  * @route /api/books
  * @method DELETE
- * @access puplic
+ * @access public
  */
 router.delete(
   "/:id",
@@ -102,7 +102,7 @@ router.delete(
  * @desc Get book by id
  * @route /api/books
  * @method GET
- * @access puplic
+ * @access public
  */
 router.get(
   "/:id",

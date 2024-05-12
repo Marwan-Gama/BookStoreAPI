@@ -11,7 +11,7 @@ const {
  * @desc Get all authors
  * @route /api/authors
  * @method GET
- * @access puplic
+ * @access public
  */
 router.get(
   "/",
@@ -25,7 +25,7 @@ router.get(
  * @desc Add author
  * @route /api/authors
  * @method POST
- * @access puplic
+ * @access public
  */
 router.post(
   "/",
@@ -46,10 +46,10 @@ router.post(
 );
 
 /**
- * @desc Update author detalis
+ * @desc Update author by id
  * @route /api/authors
  * @method PUT
- * @access puplic
+ * @access public
  */
 router.put(
   "/:id",
@@ -78,7 +78,7 @@ router.put(
  * @desc Delete author by id
  * @route /api/authors
  * @method DELETE
- * @access puplic
+ * @access public
  */
 router.delete(
   "/:id",
@@ -96,7 +96,7 @@ router.delete(
  * @desc Get author by id
  * @route /api/authors
  * @method GET
- * @access puplic
+ * @access public
  */
 router.get("/:id", async (req, res) => {
   const author = await Author.findById(req.params.id);

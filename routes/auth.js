@@ -13,7 +13,7 @@ const {
  * @desc  Register New User
  * @route /api/auth
  * @method POST
- * @access puplic
+ * @access public
  */
 router.post(
   "/register",
@@ -38,7 +38,13 @@ router.post(
       isAdmin: req.body.isAdmin,
     });
 
-    const token = null;
+    const token = jwt.sign(
+      { id: user._id, isAdmin: user.isAdmin },
+      process.env.JWT_SECRET_KEY,
+      {
+        expiresIn: "3d",
+      }
+    );
     const result = await user.save();
     const { password, ...other } = result._doc;
     res.status(201).json({ ...other, token });
@@ -49,7 +55,7 @@ router.post(
  * @desc  Login User
  * @route /api/auth
  * @method POST
- * @access puplic
+ * @access public
  */
 router.post(
   "/login",
