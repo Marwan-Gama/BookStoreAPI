@@ -1,4 +1,4 @@
-const AsyncHandler = require("express-async-handler");
+const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const { User, ValidateUpdateUser } = require("../models/User");
 
@@ -8,7 +8,7 @@ const { User, ValidateUpdateUser } = require("../models/User");
  * @method PUT
  * @access private (Only for Admin)
  */
-const GetAllUsers = AsyncHandler(async (req, res) => {
+const GetAllUsers = asyncHandler(async (req, res) => {
   const usersList = await User.find().select("-password");
   res.status(200).json(usersList);
 });
@@ -19,7 +19,7 @@ const GetAllUsers = AsyncHandler(async (req, res) => {
  * @method PUT
  * @access private
  */
-const UpdateUserByID = AsyncHandler(async (req, res) => {
+const UpdateUserByID = asyncHandler(async (req, res) => {
   const { error } = ValidateUpdateUser(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -53,7 +53,7 @@ const UpdateUserByID = AsyncHandler(async (req, res) => {
  * @method GET
  * @access private (only admin && user himself)
  */
-const GetUserByID = AsyncHandler(async (req, res) => {
+const GetUserByID = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).select("-password");
   if (user) {
     res.status(200).json(user);
@@ -68,7 +68,7 @@ const GetUserByID = AsyncHandler(async (req, res) => {
  * @method DELETE
  * @access private (only admin && user himself)
  */
-const DeleteUserByID = AsyncHandler(async (req, res) => {
+const DeleteUserByID = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
   if (user) {
     await User.findByIdAndDelete(req.params.id);

@@ -1,4 +1,4 @@
-const AsyncHandler = require("express-async-handler");
+const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const {
   User,
@@ -12,7 +12,7 @@ const {
  * @method POST
  * @access public
  */
-const RegisterNewUser = AsyncHandler(async (req, res) => {
+const RegisterNewUser = asyncHandler(async (req, res) => {
   const { error } = ValidateRegisterUser(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -44,7 +44,7 @@ const RegisterNewUser = AsyncHandler(async (req, res) => {
  * @method POST
  * @access public
  */
-const LoginUser = AsyncHandler(async (req, res) => {
+const LoginUser = asyncHandler(async (req, res) => {
   const { error } = ValidateLoginUser(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });

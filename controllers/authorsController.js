@@ -1,4 +1,4 @@
-const AsyncHandler = require("express-async-handler");
+const asyncHandler = require("express-async-handler");
 const {
   Author,
   validateCreateAuthor,
@@ -11,7 +11,7 @@ const {
  * @method GET
  * @access public
  */
-const GetAllAuthors = AsyncHandler(async (req, res) => {
+const GetAllAuthors = asyncHandler(async (req, res) => {
   const { pageNumber, authorPerPage } = req.query;
   let authorsList;
   if (pageNumber && authorPerPage) {
@@ -31,7 +31,7 @@ const GetAllAuthors = AsyncHandler(async (req, res) => {
  * @method POST
  * @access private (onle admin)
  */
-const AddAuthor = AsyncHandler(async (req, res) => {
+const AddAuthor = asyncHandler(async (req, res) => {
   const { error } = validateCreateAuthor(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -54,7 +54,7 @@ const AddAuthor = AsyncHandler(async (req, res) => {
  * @method PUT
  * @access private (onle admin)
  */
-const UpdateAutherByID = AsyncHandler(async (req, res) => {
+const UpdateAutherByID = asyncHandler(async (req, res) => {
   const { error } = validateUpdateAuthor(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -82,7 +82,7 @@ const UpdateAutherByID = AsyncHandler(async (req, res) => {
  * @method DELETE
  * @access private (onle admin)
  */
-const DeleteAutherByID = AsyncHandler(async (req, res) => {
+const DeleteAutherByID = asyncHandler(async (req, res) => {
   const author = await Author.findByIdAndDelete(req.params.id);
   if (author) {
     res.status(200).json({ message: "Author has ben deleting" });
@@ -97,7 +97,7 @@ const DeleteAutherByID = AsyncHandler(async (req, res) => {
  * @method GET
  * @access public
  */
-const GetAuthorByID = AsyncHandler(async (req, res) => {
+const GetAuthorByID = asyncHandler(async (req, res) => {
   const author = await Author.findById(req.params.id);
   if (author) {
     res.status(200).json(author);

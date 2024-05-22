@@ -1,4 +1,4 @@
-const AsyncHandler = require("express-async-handler");
+const asyncHandler = require("express-async-handler");
 const {
   Book,
   validateUpdateBook,
@@ -11,7 +11,7 @@ const {
  * @method GET
  * @access public
  */
-const GetAllBooks = AsyncHandler(async (req, res) => {
+const GetAllBooks = asyncHandler(async (req, res) => {
   const { minPrice, maxPrice } = req.query;
   let booksList;
 
@@ -36,7 +36,7 @@ const GetAllBooks = AsyncHandler(async (req, res) => {
  * @method GET
  * @access public
  */
-const GetBookByID = AsyncHandler(async (req, res) => {
+const GetBookByID = asyncHandler(async (req, res) => {
   const book = await Book.findById(req.params.id).populate("author", [
     "_id",
     "firstName",
@@ -57,7 +57,7 @@ const GetBookByID = AsyncHandler(async (req, res) => {
  * @method POST
  * @access private (onle admin)
  */
-const AddBook = AsyncHandler(async (req, res) => {
+const AddBook = asyncHandler(async (req, res) => {
   const { error } = validateCreateBook(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -81,7 +81,7 @@ const AddBook = AsyncHandler(async (req, res) => {
  * @method PUT
  * @access private (onle admin)
  */
-const UpdateBookByID = AsyncHandler(async (req, res) => {
+const UpdateBookByID = asyncHandler(async (req, res) => {
   const { error } = validateUpdateBook(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -114,7 +114,7 @@ const UpdateBookByID = AsyncHandler(async (req, res) => {
  * @method DELETE
  * @access private (onle admin)
  */
-const DeleteBookByID = AsyncHandler(async (req, res) => {
+const DeleteBookByID = asyncHandler(async (req, res) => {
   const book = await Book.findByIdAndDelete(req.params.id);
   if (book) {
     res.status(200).json({ message: "Book has ben deleting" });
