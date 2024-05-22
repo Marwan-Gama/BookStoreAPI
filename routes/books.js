@@ -17,9 +17,21 @@ const { verifyTokenAndAdmin } = require("../middlewares/verifyToken");
 router.get(
   "/",
   AsyncHandler(async (req, res) => {
-    const booksList = await Book.find()
-      .sort({ name: 1 })
-      .populate("author", ["_id", "firstName", "LastName"]);
+    const { minPrice, maxPrice } = req.query;
+    let booksList;
+
+    if (minPrice && maxPrice) {
+      booksList = await Book.find({
+        price: { $gte: minPrice, $lte: maxPrice },
+      })
+        .sort({ name: 1 })
+        .populate("author", ["_id", "firstName", "LastName"]);
+    } else {
+      booksList = await Book.find()
+        .sort({ name: 1 })
+        .populate("author", ["_id", "firstName", "LastName"]);
+    }
+
     res.status(200).json(booksList);
   })
 );
