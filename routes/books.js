@@ -1,147 +1,25 @@
 const express = require("express");
 const router = express.Router();
-const AsyncHandler = require("express-async-handler");
-const {
-  Book,
-  validateUpdateBook,
-  validateCreateBook,
-} = require("../models/Book");
 const { verifyTokenAndAdmin } = require("../middlewares/verifyToken");
+const {
+  GetAllBooks,
+  GetBookByID,
+  AddBook,
+  UpdateBookByID,
+  DeleteBookByID,
+} = require("../controllers/bookController");
 
-/**
- * @desc Get all books
- * @route /api/books
- * @method GET
- * @access public
- */
-router.get(
-  "/",
-  AsyncHandler(async (req, res) => {
-    const { minPrice, maxPrice } = req.query;
-    let booksList;
+//  /api/books/
+router
+  .route("/")
+  .get(GetAllBooks)
+  .post(verifyTokenAndAdmin, AddBook);
 
-    if (minPrice && maxPrice) {
-      booksList = await Book.find({
-        price: { $gte: minPrice, $lte: maxPrice },
-      })
-        .sort({ name: 1 })
-        .populate("author", ["_id", "firstName", "LastName"]);
-    } else {
-      booksList = await Book.find()
-        .sort({ name: 1 })
-        .populate("author", ["_id", "firstName", "LastName"]);
-    }
-
-    res.status(200).json(booksList);
-  })
-);
-
-/**
- * @desc Add book
- * @route /api/books
- * @method POST
- * @access private (onle admin)
- */
-router.post(
-  "/",
-  verifyTokenAndAdmin,
-  AsyncHandler(async (req, res) => {
-    const { error } = validateCreateBook(req.body);
-    if (error) {
-      return res.status(400).json({ message: error.details[0].message });
-    }
-
-    const book = new Book({
-      title: req.body.title,
-      author: req.body.author,
-      description: req.body.description,
-      price: req.body.price,
-      cover: req.body.cover,
-    });
-
-    const result = await book.save();
-    res.status(201).json(result);
-  })
-);
-
-/**
- * @desc Update book by id
- * @route /api/books
- * @method PUT
- * @access private (onle admin)
- */
-router.put(
-  "/:id",
-  verifyTokenAndAdmin,
-  AsyncHandler(async (req, res) => {
-    const { error } = validateUpdateBook(req.body);
-    if (error) {
-      return res.status(400).json({ message: error.details[0].message });
-    }
-
-    const book = await Book.findByIdAndUpdate(
-      req.params.id,
-      {
-        $set: {
-          title: req.body.title,
-          author: req.body.author,
-          description: req.body.description,
-          price: req.body.price,
-          cover: req.body.cover,
-        },
-      },
-      { new: true }
-    );
-
-    if (book) {
-      res.status(200).json({ message: "Book has ben updating" });
-    } else {
-      res.status(404).json({ message: "Book not find!" });
-    }
-  })
-);
-
-/**
- * @desc Delete book by id
- * @route /api/books
- * @method DELETE
- * @access private (onle admin)
- */
-router.delete(
-  "/:id",
-  verifyTokenAndAdmin,
-  AsyncHandler(async (req, res) => {
-    const book = await Book.findByIdAndDelete(req.params.id);
-    if (book) {
-      res.status(200).json({ message: "Book has ben deleting" });
-    } else {
-      res.status(404).json({ message: "Book not find!" });
-    }
-  })
-);
-
-/**
- * @desc Get book by id
- * @route /api/books
- * @method GET
- * @access public
- */
-router.get(
-  "/:id",
-  AsyncHandler(async (req, res) => {
-    const book = await Book.findById(req.params.id).populate("author", [
-      "_id",
-      "firstName",
-      "LastName",
-    ]);
-    if (book) {
-      res.status(200).json(book);
-    } else {
-      res
-        .status(404)
-        .json({ message: `Book With ID ${req.params.id} Not Found!` });
-    }
-  })
-);
+//  /api/books/:id
+router
+  .route("/:id")
+  .put(verifyTokenAndAdmin, UpdateBookByID)
+  .delete(verifyTokenAndAdmin, DeleteBookByID)
+  .get(GetBookByID);
 
 module.exports = router;
