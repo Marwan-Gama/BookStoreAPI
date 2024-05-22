@@ -17,7 +17,11 @@ const { verifyTokenAndAdmin } = require("../middlewares/verifyToken");
 router.get(
   "/",
   AsyncHandler(async (req, res) => {
-    const authorsList = await Author.find().sort({ firstName: 1 });
+    const { pageNumber, authorPerPage } = req.query;
+    const authorsList = await Author.find()
+      .sort({ firstName: 1 })
+      .skip((pageNumber - 1) * authorPerPage)
+      .limit(authorPerPage);
     res.status(200).json(authorsList);
   })
 );
@@ -39,7 +43,9 @@ router.post(
 
     const author = new Author({
       firstName: req.body.firstName,
-      LastName: req.body.LastName,
+      lastName: req.body.lastName,
+      nationality: req.body.nationality,
+      image: req.body.image,
     });
 
     const result = await author.save();
@@ -67,7 +73,9 @@ router.put(
       {
         $set: {
           firstName: req.body.firstName,
-          LastName: req.body.LastName,
+          lastName: req.body.lastName,
+          nationality: req.body.nationality,
+          image: req.body.image,
         },
       },
       { new: true }

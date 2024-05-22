@@ -40,10 +40,23 @@ const removeBooks = async () => {
   }
 };
 
-if (process.argv[2] === "-import") {
+// Remove removeAuthors
+const removeAuthors = async () => {
+  try {
+    await Author.deleteMany();
+    console.log("Authors Removed!");
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+};
+
+if (process.argv[2] === "-import-books") {
   importBooks();
-} else if (process.argv[2] === "-remove") {
+} else if (process.argv[2] === "-remove-books") {
   removeBooks();
 } else if (process.argv[2] === "-import-authors") {
   importAuthors();
+} else if (process.argv[2] === "-remove-authors") {
+  removeAuthors();
 }
