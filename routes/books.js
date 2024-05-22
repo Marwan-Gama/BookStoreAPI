@@ -40,8 +40,11 @@ router.post(
     }
 
     const book = new Book({
-      name: req.body.name,
+      title: req.body.title,
       author: req.body.author,
+      description: req.body.description,
+      price: req.body.price,
+      cover: req.body.cover,
     });
 
     const result = await book.save();
@@ -68,8 +71,11 @@ router.put(
       req.params.id,
       {
         $set: {
-          name: req.body.name,
+          title: req.body.title,
           author: req.body.author,
+          description: req.body.description,
+          price: req.body.price,
+          cover: req.body.cover,
         },
       },
       { new: true }
